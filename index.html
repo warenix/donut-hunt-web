@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donut Hunt — Snap Colors. Collect Donuts. Complete Missions!</title>
+<meta name="description" content="Donut Hunt is a playful photography game that turns the world around you into a candy-filled color collection adventure. Snap photos of real colors, collect donuts, complete missions! Available on Google Play.">
+<link rel="icon" href="https://play-lh.googleusercontent.com/tf4Xqc1MNgNyesfvKNFfxw9ed19HSycSGsuRT6KG-rCCtX7FzpZlLZGx3aOpon-gMatkK_cIWoImyCr0agZ8og=w128-h128-rw">
+<link rel="apple-touch-icon" href="https://play-lh.googleusercontent.com/tf4Xqc1MNgNyesfvKNFfxw9ed19HSycSGsuRT6KG-rCCtX7FzpZlLZGx3aOpon-gMatkK_cIWoImyCr0agZ8og=w192-h192-rw">
+<meta property="og:title" content="Donut Hunt — Snap Colors. Collect Donuts. Complete Missions!">
+<meta property="og:description" content="A playful photography game that turns the world around you into a candy-filled color collection adventure. 18 missions, 25 color donuts, fully offline.">
+<meta property="og:image" content="https://play-lh.googleusercontent.com/kVa4DdnEWlPcn9KaLlrp0PGXoULLQOmTdUoOT2pX1dKXDAENF6qb6W6DkLt3t4TDmbvDErTFsP-I22kCc3fifA=w1080-rw">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FFF7EE;
+    --cream-2: #FFEFDE;
+    --white: #FFFFFF;
+    --pink: #FF7AB6;
+    --pink-deep: #F4539D;
+    --pink-soft: #FFE3F0;
+    --coral: #FF8F6B;
+    --choco: #5B3A1E;
+    --choco-soft: #8A6544;
+    --candy-red: #FF5D8F;
+    --candy-orange: #FFB13D;
+    --candy-yellow: #FFD23D;
+    --candy-green: #3EC9A3;
+    --candy-blue: #4D96FF;
+    --candy-purple: #A78BFA;
+    --shadow: 0 10px 30px rgba(91, 58, 30, .10);
+    --shadow-lg: 0 18px 50px rgba(91, 58, 30, .16);
+    --radius: 24px;
+    --radius-sm: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Fredoka', 'Comic Sans MS', system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--choco);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ---------- sprinkles background ---------- */
+  .sprinkle-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(circle at 12% 18%, var(--pink-soft) 0, transparent 40%),
+      radial-gradient(circle at 88% 8%, #FFF3C9 0, transparent 36%),
+      radial-gradient(circle at 85% 85%, var(--pink-soft) 0, transparent 42%),
+      radial-gradient(circle at 8% 88%, #E3F3FF 0, transparent 38%),
+      var(--cream);
+  }
+
+  /* ---------- layout helpers ---------- */
+  .container { width: min(1080px, 92%); margin: 0 auto; }
+  section { padding: 88px 0; position: relative; }
+  .eyebrow {
+    display: inline-block;
+    background: var(--pink-soft);
+    color: var(--pink-deep);
+    font-weight: 600;
+    font-size: .82rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  h2 { font-size: clamp(1.9rem, 4.5vw, 2.7rem); font-weight: 700; line-height: 1.15; }
+  .section-head { text-align: center; max-width: 640px; margin: 0 auto 52px; }
+  .section-head p.lead { margin-top: 12px; color: var(--choco-soft); font-size: 1.08rem; }
+
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ---------- nav ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 247, 238, .85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(91, 58, 30, .08);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 66px; }
+  .nav .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--choco); font-weight: 700; font-size: 1.15rem; }
+  .nav .brand img { width: 38px; height: 38px; border-radius: 10px; }
+  .nav-links { display: flex; gap: 6px; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--choco-soft); font-weight: 500; font-size: .95rem; padding: 8px 12px; border-radius: 999px; transition: all .2s; }
+  .nav-links a:hover { color: var(--pink-deep); background: var(--pink-soft); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--pink) 0%, var(--coral) 100%);
+    color: #fff !important;
+    box-shadow: 0 6px 18px rgba(244, 83, 157, .35);
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(244, 83, 157, .45); }
+  .menu-toggle { display: none; background: none; border: none; font-size: 1.6rem; color: var(--choco); cursor: pointer; }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 72px 0 88px; text-align: center; }
+  .hero-icon {
+    width: clamp(110px, 20vw, 140px);
+    height: clamp(110px, 20vw, 140px);
+    border-radius: 28%;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 26px;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .hero h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.01em; }
+  .hero h1 .grad {
+    background: linear-gradient(90deg, var(--pink-deep), var(--coral), var(--candy-orange));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero .tagline { margin: 18px auto 32px; max-width: 560px; font-size: clamp(1.1rem, 2.4vw, 1.3rem); color: var(--choco-soft); font-weight: 500; }
+  .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    text-decoration: none; font-weight: 600; font-size: 1.05rem;
+    padding: 15px 30px; border-radius: 999px;
+    transition: transform .2s, box-shadow .2s;
+    border: none; cursor: pointer;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--pink) 0%, var(--pink-deep) 100%);
+    color: #fff;
+    box-shadow: 0 10px 26px rgba(244, 83, 157, .4);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(244, 83, 157, .5); }
+  .btn-ghost { background: var(--white); color: var(--choco); box-shadow: var(--shadow); }
+  .btn-ghost:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .btn svg { width: 22px; height: 22px; }
+
+  .hero-badges { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--white); border-radius: 999px;
+    padding: 9px 18px; font-size: .9rem; font-weight: 500;
+    box-shadow: 0 4px 12px rgba(91, 58, 30, .08);
+  }
+  .badge .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+  /* ---------- how to play ---------- */
+  .howto { background: var(--white); }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+  .step {
+    background: var(--cream);
+    border-radius: var(--radius);
+    padding: 34px 26px;
+    position: relative;
+    box-shadow: var(--shadow);
+    transition: transform .25s;
+  }
+  .step:hover { transform: translateY(-6px); }
+  .step .num {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: grid; place-items: center;
+    color: #fff; font-weight: 700; font-size: 1.4rem;
+    margin-bottom: 18px;
+  }
+  .num-1 { background: linear-gradient(135deg, var(--candy-blue), #6FB1FF); }
+  .num-2 { background: linear-gradient(135deg, var(--pink), var(--pink-deep)); }
+  .num-3 { background: linear-gradient(135deg, var(--candy-green), #5FD9B5); }
+  .step h3 { font-size: 1.25rem; margin-bottom: 8px; }
+  .step p { color: var(--choco-soft); font-size: .98rem; }
+
+  /* ---------- features ---------- */
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+  .feature {
+    background: var(--white); border-radius: var(--radius);
+    padding: 30px 26px; box-shadow: var(--shadow);
+    transition: transform .25s;
+  }
+  .feature:hover { transform: translateY(-6px); }
+  .feature .emoji { font-size: 2.1rem; display: block; margin-bottom: 14px; }
+  .feature h3 { font-size: 1.15rem; margin-bottom: 8px; }
+  .feature p { color: var(--choco-soft); font-size: .95rem; }
+
+  /* ---------- missions ---------- */
+  .missions { background: linear-gradient(180deg, var(--cream-2), var(--cream)); }
+  .mission-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; }
+  .mission {
+    border-radius: var(--radius-sm);
+    padding: 26px 20px;
+    color: #fff;
+    display: flex; flex-direction: column; gap: 8px;
+    box-shadow: var(--shadow);
+    transition: transform .25s;
+    min-height: 140px;
+    justify-content: flex-end;
+  }
+  .mission:hover { transform: translateY(-6px) rotate(-1deg); }
+  .mission .m-icon { font-size: 1.8rem; }
+  .mission .m-name { font-weight: 600; font-size: 1.08rem; text-shadow: 0 1px 6px rgba(0,0,0,.18); }
+  .mission .m-num { font-size: .82rem; opacity: .92; font-weight: 500; }
+  .mission.more {
+    background: var(--white);
+    color: var(--choco);
+    align-items: center; justify-content: center;
+    text-align: center; font-weight: 600;
+  }
+
+  /* ---------- color dex ---------- */
+  .dex { background: var(--white); }
+  .dex-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(86px, 1fr)); gap: 14px; }
+  .donut {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: var(--shadow);
+    transition: transform .2s;
+    display: grid; place-items: center;
+    cursor: default;
+  }
+  .donut:hover { transform: scale(1.12) rotate(8deg); z-index: 2; }
+  .donut .hole {
+    width: 30%;
+    height: 30%;
+    border-radius: 50%;
+    background: var(--cream);
+    box-shadow: inset 0 2px 6px rgba(91,58,30,.2);
+  }
+  .donut .name {
+    position: absolute;
+    top: 108%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: .72rem;
+    font-weight: 600;
+    color: var(--choco-soft);
+    text-align: center;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity .18s;
+  }
+  .donut:hover .name { opacity: 1; }
+  .dex-foot { text-align: center; margin-top: 46px; color: var(--choco-soft); font-weight: 500; }
+
+  /* ---------- gallery ---------- */
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+  .shot {
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    cursor: zoom-in;
+    aspect-ratio: 16/10;
+    transition: transform .25s, box-shadow .25s;
+    border: none; padding: 0; background: none;
+  }
+  .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .shot:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+  /* lightbox */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(43, 24, 10, .88);
+    display: none; align-items: center; justify-content: center;
+    padding: 4vw; cursor: zoom-out;
+    backdrop-filter: blur(4px);
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: min(92vw, 880px);
+    max-height: 88vh;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 30px 80px rgba(0,0,0,.5);
+    cursor: default;
+  }
+
+  /* ---------- privacy ---------- */
+  .privacy-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+  .privacy-card {
+    background: var(--white); border-radius: var(--radius);
+    padding: 30px 26px; box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .privacy-card .emoji { font-size: 2.2rem; display: block; margin-bottom: 12px; }
+  .privacy-card h3 { font-size: 1.12rem; margin-bottom: 8px; }
+  .privacy-card p { color: var(--choco-soft); font-size: .95rem; }
+
+  /* ---------- CTA ---------- */
+  .final-cta {
+    background: linear-gradient(135deg, #FF9ECB 0%, var(--coral) 100%);
+    border-radius: 40px;
+    padding: 64px 40px;
+    text-align: center;
+    color: #fff;
+    box-shadow: var(--shadow-lg);
+  }
+  .final-cta h2 { color: #fff; }
+  .final-cta p { margin: 14px auto 30px; max-width: 520px; font-size: 1.1rem; opacity: .95; }
+  .btn-white {
+    background: #fff; color: var(--pink-deep);
+    box-shadow: 0 12px 30px rgba(91,58,30,.22);
+  }
+  .btn-white:hover { transform: translateY(-2px); }
+
+  /* ---------- footer ---------- */
+  footer { padding: 48px 0 60px; text-align: center; }
+  footer .foot-links { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px; }
+  footer .foot-links a { color: var(--choco-soft); text-decoration: none; font-weight: 500; font-size: .95rem; }
+  footer .foot-links a:hover { color: var(--pink-deep); }
+  footer .copy { color: var(--choco-soft); font-size: .88rem; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 820px) {
+    .nav-links {
+      position: fixed; inset: 66px 0 auto 0;
+      background: var(--cream);
+      flex-direction: column; align-items: stretch;
+      padding: 18px 6vw 24px;
+      box-shadow: 0 20px 40px rgba(91,58,30,.12);
+      display: none;
+      gap: 8px;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { text-align: center; padding: 12px; font-size: 1.05rem; }
+    .menu-toggle { display: block; }
+    section { padding: 64px 0; }
+  }
+</style>
+</head>
+<body>
+<div class="sprinkle-bg"></div>
+
+<!-- ================= NAV ================= -->
+<header>
+  <div class="container nav">
+    <a class="brand" href="#top">
+      <img src="https://play-lh.googleusercontent.com/tf4Xqc1MNgNyesfvKNFfxw9ed19HSycSGsuRT6KG-rCCtX7FzpZlLZGx3aOpon-gMatkK_cIWoImyCr0agZ8og=w96-h96-rw" alt="Donut Hunt app icon">
+      Donut Hunt
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#how-to-play">How to Play</a>
+      <a href="#features">Features</a>
+      <a href="#missions">Missions</a>
+      <a href="#dex">Color Dex</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#privacy">Privacy</a>
+      <a class="nav-cta" href="https://play.google.com/store/apps/details?id=org.dyndns.warenix.donuthunt" target="_blank" rel="noopener">Get on Google Play</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="container">
+      <img class="hero-icon" src="https://play-lh.googleusercontent.com/tf4Xqc1MNgNyesfvKNFfxw9ed19HSycSGsuRT6KG-rCCtX7FzpZlLZGx3aOpon-gMatkK_cIWoImyCr0agZ8og=w512-h512-rw" alt="Donut Hunt icon — a colorful donut">
+      <h1>Snap photos of real colors,<br><span class="grad">collect donuts</span>, complete missions!</h1>
+      <p class="tagline">Donut Hunt is a playful photography game that turns the world around you into a candy-filled color collection adventure. Every color you discover becomes a delicious donut in your Color Dex.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=org.dyndns.warenix.donuthunt" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 1.8 13.7 12 3.6 22.2c-.4-.3-.6-.7-.6-1.3V3.1c0-.6.2-1 .6-1.3zm12 12.9 2.6 2.6-3.3 1.9-3.9-2.9 4.6-1.6zM18.2 5.3l-3.9 2.2-1.2 4.5-1.2-4.5 1.2-4.5zM4 2.4 13.7 12 4 21.6c-.4-.3-.6-.7-.6-1.3V3.1c0-.6.2-1 .6-1.3z"/></svg>
+          Download on Google Play
+        </a>
+        <a class="btn btn-ghost" href="#gallery">See the Game ↓</a>
+      </div>
+      <div class="hero-badges">
+        <span class="badge"><span class="dot" style="background:var(--candy-green)"></span>Fully offline</span>
+        <span class="badge"><span class="dot" style="background:var(--candy-blue)"></span>No ads · no data collected</span>
+        <span class="badge"><span class="dot" style="background:var(--candy-orange)"></span>Rated 3+</span>
+        <span class="badge"><span class="dot" style="background:var(--pink)"></span>One-handed play</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW TO PLAY ================= -->
+  <section class="howto" id="how-to-play">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">How to play</span>
+        <h2>Three simple steps to sweetness</h2>
+        <p class="lead">Grab your phone, look through the viewfinder, and snap photos of the colors hiding all around you.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="num num-1">1</div>
+          <h3>Pick a mission</h3>
+          <p>Choose a mission from the Kitchen — like <strong>Sunrise Drive</strong>, <strong>Ocean Blue</strong>, or <strong>Rainbow Road</strong>.</p>
+        </div>
+        <div class="step reveal">
+          <div class="num num-2">2</div>
+          <h3>Point &amp; snap</h3>
+          <p>Point your camera at anything colorful — a red apple, a yellow taxi, a blue sky. Tap the donut shutter (or the volume buttons!).</p>
+        </div>
+        <div class="step reveal">
+          <div class="num num-3">3</div>
+          <h3>Collect donuts</h3>
+          <p>Match the color donuts to complete the mission and unlock the next one. Fill your Color Dex one photo at a time!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FEATURES ================= -->
+  <section id="features">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Features</span>
+        <h2>Baked with love</h2>
+        <p class="lead">Everything you need for a sweet, satisfying color-hunting adventure.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature reveal"><span class="emoji">🧁</span><h3>18 Themed Missions</h3><p>From Candy Shop to Jungle Quest — each themed mission sends you hunting for a specific set of colors.</p></div>
+        <div class="feature reveal"><span class="emoji">🍩</span><h3>25 Colors in the Color Dex</h3><p>Discover and collect every unique color donut. Can you complete the whole collection?</p></div>
+        <div class="feature reveal"><span class="emoji">🎨</span><h3>Smart Color Recognition</h3><p>Every photo is instantly analyzed on your device to find every hue hiding in it — no manual matching needed.</p></div>
+        <div class="feature reveal"><span class="emoji">📷</span><h3>Live Viewfinder</h3><p>See colors through the camera in real time, with pinch-to-zoom and zoom controls right at your fingertips.</p></div>
+        <div class="feature reveal"><span class="emoji">💾</span><h3>Auto-Save Progress</h3><p>Your missions and Color Dex are saved automatically — pick up right where you left off, anytime.</p></div>
+        <div class="feature reveal"><span class="emoji">🌈</span><h3>Bright &amp; Cheerful</h3><p>Donut-themed design with satisfying animations and sounds, built for one-handed play, fully offline.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MISSIONS ================= -->
+  <section class="missions" id="missions">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">The Mission Kitchen</span>
+        <h2>18 missions, one rainbow goal</h2>
+        <p class="lead">Every mission challenges you to find a specific set of colors in the real world. Complete them all to become a <strong>Rainbow Champion</strong>!</p>
+      </div>
+      <div class="mission-cards">
+        <div class="mission reveal" style="background:linear-gradient(135deg,#FFB13D,#FF7AB6)">
+          <span class="m-icon">🌅</span>
+          <span class="m-name">Sunrise Drive</span>
+          <span class="m-num">Warm morning colors</span>
+        </div>
+        <div class="mission reveal" style="background:linear-gradient(135deg,#4D96FF,#3EC9A3)">
+          <span class="m-icon">🌊</span>
+          <span class="m-name">Ocean Blue</span>
+          <span class="m-num">Cool aquatic hues</span>
+        </div>
+        <div class="mission reveal" style="background:linear-gradient(135deg,#FF5D8F,#A78BFA)">
+          <span class="m-icon">🌈</span>
+          <span class="m-name">Rainbow Road</span>
+          <span class="m-num">Every color of the rainbow</span>
+        </div>
+        <div class="mission reveal" style="background:linear-gradient(135deg,#FF8F6B,#FFD23D)">
+          <span class="m-icon">🍬</span>
+          <span class="m-name">Candy Shop</span>
+          <span class="m-num">Sweet, sugary shades</span>
+        </div>
+        <div class="mission reveal" style="background:linear-gradient(135deg,#3EC9A3,#2B8A6B)">
+          <span class="m-icon">🌴</span>
+          <span class="m-name">Jungle Quest</span>
+          <span class="m-num">Deep greens &amp; earth tones</span>
+        </div>
+        <div class="mission more reveal">
+          <span class="m-icon">🍩</span>
+          <span>+ 13 more missions to discover…</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COLOR DEX ================= -->
+  <section class="dex" id="dex">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Color Dex</span>
+        <h2>25 color donuts to collect</h2>
+        <p class="lead">Hover a donut to see its name. Find each one in the real world to add it to your collection.</p>
+      </div>
+      <div class="dex-grid">
+        <!-- 25 donuts -->
+        <div class="donut reveal" style="background:#E53935"><div class="hole"></div><span class="name">Cherry</span></div>
+        <div class="donut reveal" style="background:#FF8A65"><div class="hole"></div><span class="name">Peach</span></div>
+        <div class="donut reveal" style="background:#FFB300"><div class="hole"></div><span class="name">Honey</span></div>
+        <div class="donut reveal" style="background:#FDD835"><div class="hole"></div><span class="name">Lemon</span></div>
+        <div class="donut reveal" style="background:#9CCC65"><div class="hole"></div><span class="name">Lime</span></div>
+        <div class="donut reveal" style="background:#43A047"><div class="hole"></div><span class="name">Mint</span></div>
+        <div class="donut reveal" style="background:#26A69A"><div class="hole"></div><span class="name">Teal</span></div>
+        <div class="donut reveal" style="background:#29B6F6"><div class="hole"></div><span class="name">Sky</span></div>
+        <div class="donut reveal" style="background:#1E88E5"><div class="hole"></div><span class="name">Ocean</span></div>
+        <div class="donut reveal" style="background:#3949AB"><div class="hole"></div><span class="name">Indigo</span></div>
+        <div class="donut reveal" style="background:#5E35B1"><div class="hole"></div><span class="name">Grape</span></div>
+        <div class="donut reveal" style="background:#8E24AA"><div class="hole"></div><span class="name">Plum</span></div>
+        <div class="donut reveal" style="background:#D81B60"><div class="hole"></div><span class="name">Rose</span></div>
+        <div class="donut reveal" style="background:#EC407A"><div class="hole"></div><span class="name">Pink</span></div>
+        <div class="donut reveal" style="background:#F06292"><div class="hole"></div><span class="name">Blossom</span></div>
+        <div class="donut reveal" style="background:#FF7043"><div class="hole"></div><span class="name">Tangerine</span></div>
+        <div class="donut reveal" style="background:#8D6E63"><div class="hole"></div><span class="name">Cocoa</span></div>
+        <div class="donut reveal" style="background:#6D4C41"><div class="hole"></div><span class="name">Mocha</span></div>
+        <div class="donut reveal" style="background:#A1887F"><div class="hole"></div><span class="name">Latte</span></div>
+        <div class="donut reveal" style="background:#78909C"><div class="hole"></div><span class="name">Slate</span></div>
+        <div class="donut reveal" style="background:#90A4AE"><div class="hole"></div><span class="name">Silver</span></div>
+        <div class="donut reveal" style="background:#B0BEC5"><div class="hole"></div><span class="name">Frost</span></div>
+        <div class="donut reveal" style="background:#CFD8DC"><div class="hole"></div><span class="name">Snow</span></div>
+        <div class="donut reveal" style="background:#F8BBD0"><div class="hole"></div><span class="name">Cotton Candy</span></div>
+        <div class="donut reveal" style="background:#B39DDB"><div class="hole"></div><span class="name">Lavender</span></div>
+      </div>
+      <p class="dex-foot reveal">Complete all 18 missions, discover all 25 color donuts, and prove you have the sharpest color-hunting eyes around! 👀🍩</p>
+    </div>
+  </section>
+
+  <!-- ================= GALLERY ================= -->
+  <section id="gallery">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Gallery</span>
+        <h2>Take a peek inside the Kitchen</h2>
+        <p class="lead">Tap any screenshot to zoom in.</p>
+      </div>
+      <div class="gallery-grid">
+        <button class="shot reveal" data-img="https://play-lh.googleusercontent.com/kVa4DdnEWlPcn9KaLlrp0PGXoULLQOmTdUoOT2pX1dKXDAENF6qb6W6DkLt3t4TDmbvDErTFsP-I22kCc3fifA=w1080-rw"><img loading="lazy" src="https://play-lh.googleusercontent.com/kVa4DdnEWlPcn9KaLlrp0PGXoULLQOmTdUoOT2pX1dKXDAENF6qb6W6DkLt3t4TDmbvDErTFsP-I22kCc3fifA=w640-rw" alt="Donut Hunt screenshot 1"></button>
+        <button class="shot reveal" data-img="https://play-lh.googleusercontent.com/9WRgUpMZWr72t1gLU40GxPcODBZaXaHiAXVo47RfBkX5jjxDUz9OBX2vmsBB_c9GVyLDpTAcTRWzsUrjjzdgoS4=w1080-rw"><img loading="lazy" src="https://play-lh.googleusercontent.com/9WRgUpMZWr72t1gLU40GxPcODBZaXaHiAXVo47RfBkX5jjxDUz9OBX2vmsBB_c9GVyLDpTAcTRWzsUrjjzdgoS4=w640-rw" alt="Donut Hunt screenshot 2"></button>
+        <button class="shot reveal" data-img="https://play-lh.googleusercontent.com/tJMWmMIKG0mEq1KQX3jCOowf1GduZ-jS-RHrjt69KJD8u0HoII2Uy3II2oIp8KrCExeECdnFQ_KVxVTLiEgY8g=w1080-rw"><img loading="lazy" src="https://play-lh.googleusercontent.com/tJMWmMIKG0mEq1KQX3jCOowf1GduZ-jS-RHrjt69KJD8u0HoII2Uy3II2oIp8KrCExeECdnFQ_KVxVTLiEgY8g=w640-rw" alt="Donut Hunt screenshot 3"></button>
+        <button class="shot reveal" data-img="https://play-lh.googleusercontent.com/qzQreeM4W5ewFNXJaOUOn74Q8s3XxxTEr2PQQCFvg-P6IDr1VuruAA6DpqXDwqrcakv-_B8QOCjdAGIi7AVDfA=w1080-rw"><img loading="lazy" src="https://play-lh.googleusercontent.com/qzQreeM4W5ewFNXJaOUOn74Q8s3XxxTEr2PQQCFvg-P6IDr1VuruAA6DpqXDwqrcakv-_B8QOCjdAGIi7AVDfA=w640-rw" alt="Donut Hunt screenshot 4"></button>
+        <button class="shot reveal" data-img="https://play-lh.googleusercontent.com/9wqjNrPVuHTQffmPrNzBZWcqSIPwxicf13AMJT1pdYF3g_oIJOsW4r4ZS3nBqBaoT4i3Ojhdr8ZSxk_QeC_NGA=w1080-rw"><img loading="lazy" src="https://play-lh.googleusercontent.com/9wqjNrPVuHTQffmPrNzBZWcqSIPwxicf13AMJT1pdYF3g_oIJOsW4r4ZS3nBqBaoT4i3Ojhdr8ZSxk_QeC_NGA=w640-rw" alt="Donut Hunt screenshot 5"></button>
+        <button class="shot reveal" data-img="https://play-lh.googleusercontent.com/DA6ZLW9CH4Z5THQKAvbE2AzZa8mnqZkT_5fFTcs4HMgUpqiEoQkdqWFiidk1dCgTGJ03J7baBgXXvIgIg-LKDQ=w1080-rw"><img loading="lazy" src="https://play-lh.googleusercontent.com/DA6ZLW9CH4Z5THQKAvbE2AzZa8mnqZkT_5fFTcs4HMgUpqiEoQkdqWFiidk1dCgTGJ03J7baBgXXvIgIg-LKDQ=w640-rw" alt="Donut Hunt screenshot 6"></button>
+        <button class="shot reveal" data-img="https://play-lh.googleusercontent.com/PWnPPXnPKXlyMzkooWdhGWaqjo8eoynZJYAIbWIK4IrzHIe7RfNDt3vvVWruAfrozX8rGmkU4aZdzB6U-mO2=w1080-rw"><img loading="lazy" src="https://play-lh.googleusercontent.com/PWnPPXnPKXlyMzkooWdhGWaqjo8eoynZJYAIbWIK4IrzHIe7RfNDt3vvVWruAfrozX8rGmkU4aZdzB6U-mO2=w640-rw" alt="Donut Hunt screenshot 7"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PRIVACY ================= -->
+  <section class="howto" id="privacy">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Privacy</span>
+        <h2>Your privacy is baked in</h2>
+        <p class="lead">Donut Hunt is a single-player, offline game. Your photos stay on your device — always.</p>
+      </div>
+      <div class="privacy-cards">
+        <div class="privacy-card reveal">
+          <span class="emoji">📵</span>
+          <h3>100% Offline</h3>
+          <p>The game never connects to the internet. No data is ever transmitted to any server.</p>
+        </div>
+        <div class="privacy-card reveal">
+          <span class="emoji">🚫</span>
+          <h3>No Data Collected</h3>
+          <p>No personal data, device info, usage stats, or location. No analytics, no ads SDKs, nothing.</p>
+        </div>
+        <div class="privacy-card reveal">
+          <span class="emoji">🔒</span>
+          <h3>Photos Stay On-Device</h3>
+          <p>Color analysis happens entirely on your phone. Photos are never uploaded, stored, or shared.</p>
+        </div>
+        <div class="privacy-card reveal">
+          <span class="emoji">👨‍👩‍👧</span>
+          <h3>Family Friendly</h3>
+          <p>Rated 3+ and committed to the Play Families Policy. Sweet fun for everyone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FINAL CTA ================= -->
+  <section style="padding-top:0">
+    <div class="container">
+      <div class="final-cta reveal">
+        <h2>Ready to become a Rainbow Champion? 🌈</h2>
+        <p>Complete all 18 missions, discover every one of the 25 color donuts, and prove you have the sharpest color-hunting eyes around.</p>
+        <a class="btn btn-white" href="https://play.google.com/store/apps/details?id=org.dyndns.warenix.donuthunt" target="_blank" rel="noopener">Get Donut Hunt on Google Play</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container">
+    <div class="foot-links">
+      <a href="https://play.google.com/store/apps/details?id=org.dyndns.warenix.donuthunt" target="_blank" rel="noopener">Google Play</a>
+      <a href="https://github.com/warenix/donut-hunt-web/blob/main/privacy-policy.md" target="_blank" rel="noopener">Privacy Policy</a>
+      <a href="mailto:warenix@gmail.com">Support</a>
+    </div>
+    <p class="copy">🍩 Donut Hunt — made with ♥ by warenix · Single-player · Offline · $1.98 on Google Play</p>
+  </div>
+</footer>
+
+<!-- ================= LIGHTBOX ================= -->
+<div class="lightbox" id="lightbox"><img id="lightboxImg" src="" alt="Enlarged screenshot"></div>
+
+<script>
+  // Mobile menu
+  const toggle = document.getElementById('menuToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  // Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Lightbox
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightboxImg');
+  document.querySelectorAll('.shot').forEach(shot => {
+    shot.addEventListener('click', () => {
+      lbImg.src = shot.dataset.img;
+      lb.classList.add('open');
+    });
+  });
+  lb.addEventListener('click', () => lb.classList.remove('open'));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('open'); });
+</script>
+</body>
+</html>
