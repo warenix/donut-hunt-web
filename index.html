@@ -3,412 +3,884 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donut Hunt | Cozy Photo Adventure Mini-Game</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Donut Hunt | Snap Colors, Bake Donuts!</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Poppins (friendly, rounded) and Quicksand (light/airy) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
-
-    <!-- Tailwind Configuration for Custom Coziness -->
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'donut-cream': '#FFF8E1', /* Light, warm background */
-                        'sprinkle-pastel': '#ffb3b3', /* Soft pink accent */
-                        'sprinkle-blue': '#bbd4f5',  /* Soft blue accent */
-                        'fondant': '#e6c792',      /* Mid-tone donut/buttercream color */
-                        'bakery-brown': '#a0522d', /* Chocolate/Cocoa tone */
+                        'cream': '#FFF8E1',
+                        'peach': '#FFD6A5',
+                        'mint': '#A0E7E5',
+                        'lavender': '#BDB2FF',
+                        'pink': '#FFB5E8',
+                        'coral': '#FF9F7F',
+                        'yellow': '#FFF3B0',
+                        'sky': '#89CFF0',
+                        'chocolate': '#6B4423',
+                        'caramel': '#C1703A',
                     },
                     fontFamily: {
-                        custom: ['Quicksand', 'cursive'], /* For titles, the airy vibe */
-                        body: ['Poppins', 'sans-serif']     /* For body text, clean and readable */
+                        'display': ['Baloo 2', 'cursive'],
+                        'body': ['Fredoka', 'sans-serif'],
                     },
                     boxShadow: {
-                        'cozy': '5px 5px 15px rgba(0, 0, 0, 0.08)',
-                        'polaroid': '4px 4px 12px rgba(0, 0, 0, 0.1)'
-                    }
+                        'soft': '0 4px 20px rgba(107, 68, 35, 0.15)',
+                        'bounce': '0 10px 40px rgba(107, 68, 35, 0.2)',
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'bounce-slow': 'bounce 2s ease-in-out infinite',
+                        'spin-slow': 'spin 20s linear infinite',
+                        'pop': 'pop 0.5s ease-out',
+                        'sprinkle': 'sprinkle 4s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotate(3deg)' },
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        },
+                        pop: {
+                            '0%': { transform: 'scale(0) rotate(0deg)', opacity: '0' },
+                            '50%': { transform: 'scale(1.2) rotate(180deg)', opacity: '1' },
+                            '100%': { transform: 'scale(1) rotate(360deg)', opacity: '1' },
+                        },
+                        sprinkle: {
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)', opacity: '0.6' },
+                            '25%': { transform: 'translateY(-20px) rotate(90deg)', opacity: '1' },
+                            '50%': { transform: 'translateY(-40px) rotate(180deg)', opacity: '0.8' },
+                            '75%': { transform: 'translateY(-20px) rotate(270deg)', opacity: '1' },
+                        },
+                    },
                 }
             }
         }
     </script>
-
-<style>
-    /* Custom CSS for visual flair */
-    body {
-        background-color: #fdfbf7; /* Very light background base */
-        font-family: 'Poppins', sans-serif;
-    }
-    .section-padding {
-        @apply py-16 sm:py-24 lg:py-32;
-    }
-
-    /* Simulate the floating sprinkles/frosting effect in Hero */
-    .sprinkle-area::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background-image: radial-gradient(circle at 20% 10%, rgba(255, 179, 179, 0.4) 0%, transparent 30%),
-                              radial-gradient(circle at 80% 20%, rgba(187, 212, 245, 0.4) 0%, transparent 30%);
-        background-size: 100% 100%;
-    }
-
-    /* Polaroid Card Styling */
-    .polaroid {
-        transform: rotate(-2deg);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .polaroid:hover {
-        transform: rotate(-1deg) scale(1.03);
-        box-shadow: 6px 8px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Recipe Card Styling */
-    .recipe-card {
-        background-color: #fff;
-        border: 2px solid #ffcf73; /* Creamy border mimicry */
-        transform-style: preserve-3d;
-        transition: transform 0.4s ease-out;
-    }
-
-    /* Utility for populating the dummy image sources (since we don't have actual paths) */
-    [data-img-title] {
-        background-color: #ddd; /* Default placeholder color */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-    }
-
-</style>
+    <style>
+        :root {
+            --bg: #FEF9F0;
+        }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            font-family: 'Fredoka', sans-serif;
+            color: #4A3728;
+            overflow-x: hidden;
+        }
+        .font-display { font-family: 'Baloo 2', cursive; }
+        .text-stroke { -webkit-text-stroke: 2px #6B4423; text-stroke: 2px #6B4423; }
+        
+        /* Background pattern */
+        .bg-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 10%, rgba(255, 181, 232, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(137, 207, 240, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(160, 231, 229, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(255, 243, 176, 0.3) 0%, transparent 50%);
+            background-size: 200% 200%;
+            animation: bgShift 20s ease-in-out infinite;
+        }
+        @keyframes bgShift {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+        }
+        
+        /* Floating decorations */
+        .floating-decor { pointer-events: none; position: absolute; z-index: 0; }
+        .sprinkle { 
+            position: absolute; 
+            width: 8px; 
+            height: 18px; 
+            border-radius: 4px; 
+            animation: sprinkle 4s ease-in-out infinite;
+        }
+        
+        /* Button styles */
+        .btn-play {
+            background: linear-gradient(145deg, #FF9F7F, #FF6B4A);
+            box-shadow: 0 6px 0 #C1703A, 0 10px 30px rgba(255, 159, 127, 0.4);
+            transition: all 0.15s ease;
+        }
+        .btn-play:hover { transform: translateY(-2px); box-shadow: 0 8px 0 #C1703A, 0 14px 40px rgba(255, 159, 127, 0.5); }
+        .btn-play:active { transform: translateY(4px); box-shadow: 0 2px 0 #C1703A, 0 4px 15px rgba(255, 159, 127, 0.4); }
+        .btn-play:focus-visible { outline: 3px solid #FFD6A5; outline-offset: 3px; }
+        
+        .btn-secondary {
+            background: linear-gradient(145deg, #FFF3B0, #FFE080);
+            box-shadow: 0 4px 0 #C1A03A, 0 8px 20px rgba(255, 243, 176, 0.4);
+            transition: all 0.15s ease;
+        }
+        .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #C1A03A, 0 12px 30px rgba(255, 243, 176, 0.5); }
+        .btn-secondary:active { transform: translateY(3px); box-shadow: 0 1px 0 #C1A03A; }
+        
+        /* Card styles */
+        .mission-card {
+            background: white;
+            border: 3px solid transparent;
+            border-radius: 24px;
+            box-shadow: 0 8px 0 rgba(107, 68, 35, 0.1), 0 16px 40px rgba(107, 68, 35, 0.1);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .mission-card:hover { transform: translateY(-8px) rotate(1deg); box-shadow: 0 16px 0 rgba(107, 68, 35, 0.15), 0 24px 60px rgba(107, 68, 35, 0.2); }
+        
+        .donut-card {
+            background: white;
+            border-radius: 20px;
+            border: 3px solid #FFD6A5;
+            box-shadow: 0 6px 0 #FFB5E8, 0 12px 30px rgba(189, 178, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .donut-card:hover { transform: scale(1.05) rotate(-2deg); box-shadow: 0 10px 0 #FFB5E8, 0 20px 40px rgba(189, 178, 255, 0.3); }
+        
+        /* Polaroid gallery */
+        .polaroid {
+            background: white;
+            padding: 12px 12px 40px;
+            border-radius: 4px;
+            box-shadow: 0 8px 24px rgba(107, 68, 35, 0.2);
+            transform: rotate(var(--r, -2deg));
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+        .polaroid:nth-child(odd) { --r: -3deg; }
+        .polaroid:nth-child(even) { --r: 3deg; }
+        .polaroid:nth-child(3n) { --r: -1deg; }
+        .polaroid:hover { transform: rotate(var(--r)) scale(1.08) !important; z-index: 10; box-shadow: 0 16px 48px rgba(107, 68, 35, 0.3); }
+        .polaroid img { border-radius: 2px; width: 100%; height: 200px; object-fit: cover; }
+        
+        /* Lightbox */
+        #lightbox { backdrop-filter: blur(8px); }
+        #lightbox-content { animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        
+        /* Color swatches */
+        .color-swatch {
+            width: 44px; height: 44px; border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15), inset 0 -4px 8px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .color-swatch:hover { transform: scale(1.25); z-index: 5; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+        
+        /* Steps */
+        .step-number {
+            background: linear-gradient(145deg, #6B4423, #C1703A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { 
+                animation-duration: 0.01ms !important; 
+                animation-iteration-count: 1 !important; 
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Focus visible for accessibility */
+        :focus:not(:focus-visible) { outline: none; }
+        :focus-visible { outline: 3px solid #FFD6A5; outline-offset: 3px; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #FFF8E1; }
+        ::-webkit-scrollbar-thumb { background: #FFB5E8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF9F7F; }
+    </style>
 </head>
-<body class="bg-[#fdfbf7] text-gray-800 tracking-wide">
-
-<!-- Navigation -->
-<nav class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm shadow-md py-3">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        <h2 class="text-2xl font-custom tracking-wider">🍩 Donut Hunt</h2>
-        <button id="menu-btn" class="md:hidden block p-2 text-[#a0522d] hover:bg-[#e6d7b4]" aria-label="Open menu">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M9 5H7a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m0 4H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m-6 4h6a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H3a2 2 0 0 1-2 2v-2m0 4h6a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H3a2 2 0 0 1-2 2v-2Z"/></svg>
-        </button>
-        <ul id="mobile-menu" class="sm:hidden absolute right-0 top-full w-full bg-white shadow-md border-t border-b p-6 transform translate-x-full md:translate-x-0 duration-300 ease-in-out">
-            <a href="#how-to-play" class="block text-lg hover:text-[#d9775b] mb-4">How To Play</a>
-            <a href="#gallery" class="block text-lg hover:text-[#d9775b] mb-4">Gallery</a>
-            <a href="#download" class="block text-lg hover:text-[#d9775b] mb-4">Download</a>
-        </ul>
+<body class="bg-pattern min-h-screen">
+    
+    <!-- Floating background decorations -->
+    <div class="floating-decor" aria-hidden="true">
+        <div class="sprinkle" style="left: 5%; top: 10%; background: #FF9F7F; animation-delay: 0s;"></div>
+        <div class="sprinkle" style="left: 15%; top: 20%; background: #FFB5E8; animation-delay: 0.5s;"></div>
+        <div class="sprinkle" style="left: 25%; top: 5%; background: #89CFF0; animation-delay: 1s;"></div>
+        <div class="sprinkle" style="left: 35%; top: 30%; background: #A0E7E5; animation-delay: 1.5s;"></div>
+        <div class="sprinkle" style="left: 45%; top: 15%; background: #FFF3B0; animation-delay: 2s;"></div>
+        <div class="sprinkle" style="left: 55%; top: 8%; background: #BDB2FF; animation-delay: 2.5s;"></div>
+        <div class="sprinkle" style="left: 65%; top: 25%; background: #FF9F7F; animation-delay: 3s;"></div>
+        <div class="sprinkle" style="left: 75%; top: 12%; background: #FFB5E8; animation-delay: 3.5s;"></div>
+        <div class="sprinkle" style="left: 85%; top: 35%; background: #89CFF0; animation-delay: 0.8s;"></div>
+        <div class="sprinkle" style="left: 95%; top: 18%; background: #A0E7E5; animation-delay: 1.8s;"></div>
+        <div class="sprinkle" style="left: 8%; top: 50%; background: #FFF3B0; animation-delay: 0.3s;"></div>
+        <div class="sprinkle" style="left: 18%; top: 60%; background: #BDB2FF; animation-delay: 1.3s;"></div>
+        <div class="sprinkle" style="left: 28%; top: 45%; background: #FF9F7F; animation-delay: 2.3s;"></div>
+        <div class="sprinkle" style="left: 38%; top: 70%; background: #FFB5E8; animation-delay: 3.3s;"></div>
+        <div class="sprinkle" style="left: 48%; top: 55%; background: #89CFF0; animation-delay: 0.6s;"></div>
+        <div class="sprinkle" style="left: 58%; top: 65%; background: #A0E7E5; animation-delay: 1.6s;"></div>
+        <div class="sprinkle" style="left: 68%; top: 48%; background: #FFF3B0; animation-delay: 2.6s;"></div>
+        <div class="sprinkle" style="left: 78%; top: 75%; background: #BDB2FF; animation-delay: 3.6s;"></div>
+        <div class="sprinkle" style="left: 88%; top: 58%; background: #FF9F7F; animation-delay: 0.9s;"></div>
+        <div class="sprinkle" style="left: 92%; top: 80%; background: #FFB5E8; animation-delay: 1.9s;"></div>
     </div>
-</nav>
 
-<script>
-    document.getElementById('menu-btn').addEventListener('click', () => {
-        const menu = document.getElementById('mobile-menu');
-        menu.classList.toggle('translate-x-0');
-    });
-</script>
-    <!-- 1. Hero Section (The Bakery Window) -->
-    <header class="section-padding relative overflow-hidden text-center sparkle-area">
-        <!-- Background Sprinkles/Pattern Area -->
-        <div class="absolute inset-0 bg-donut-cream z-0"></div >
-
-        <div class="relative z-10 max-w-4xl mx-auto px-6 py-20 lg:py-32">
-            <!-- Headline & Intro -->
-            <h1 class="text-6xl md:text-7xl font-custom text-[#a0522d] mb-4 leading-tight drop-shadow-md">
-                🍩 Donut <span class="text-[#ffb3b3]">Hunt</span>
-            </h1>
-            <p class="text-xl lg:text-2xl text-gray-600 max-w-2xl mx-auto mb-8 font-body">
-                Snap photos of everyday colors. Discover nature's palette, blend them perfectly, and bake whimsical sweet donuts—all at your own cozy pace.
-            </p>
-
-            <!-- Call to Action -->
-            <div class="mt-10 flex justify-center space-x-6">
-                <!-- Free Download Button -->
-                <a href="#" target="_blank" role="button" class="bg-[#a0522d] text-white py-3 px-8 rounded-full font-bold shadow-xl hover:shadow-2xl transition duration-300 flex items-center">
-                    <svg class="w-6 h-6 mr-2 fill-current" viewBox="0 0 24 24"><path d="M9.01,21.53L7.25,23h-2.82l2.25,-11h3.86l-2.25,11z"/></svg>
-                    Get it Free
-                </a >
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-soft py-4 px-4 sm:px-6 lg:px-8" role="navigation" aria-label="Main navigation">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="#" class="font-display text-2xl sm:text-3xl font-bold text-chocolate flex items-center gap-2 animate-wiggle" aria-label="Donut Hunt Home">
+                <span class="animate-float">🍩</span> Donut Hunt
+            </a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="#how-to-play" class="text-chocolate/80 hover:text-coral font-semibold transition-colors">How to Play</a>
+                <a href="#missions" class="text-chocolate/80 hover:text-coral font-semibold transition-colors">Missions</a>
+                <a href="#gallery" class="text-chocolate/80 hover:text-coral font-semibold transition-colors">Gallery</a>
+                <a href="#color-dex" class="text-chocolate/80 hover:text-coral font-semibold transition-colors">Color Dex</a>
             </div>
-
-            <!-- Interactive Playful Visual (Polaroid to Donut) -->
-            <div class="mt-20 flex justify-center items-end space-x-8">
-                <!-- Polaroid Photo Placeholder -->
-                <div id="polaroid-display" onclick="showPhoto()" class="w-56 h-72 bg-white p-4 rounded-xl shadow-cozy border-4 border-[#a0522d] transform hover:scale-[1.02]">
-                    <div class="text-xs text-gray-500 mb-2">Snapshot Ready!</div >
-                    <div data-img-title class="w-full h-60 bg-gray-200 rounded p-3 flex items-center justify-center text-sm text-gray-400 cursor-pointer transition duration-300 hover:bg-pink-100">
-                        Snap a Photo Here (Click Me)<br>-- Example Color --
-                    </div>
-                </div>
-
-                <!-- Transformation Placeholder (Donut) -->
-                <div class="w-64 h-72 flex items-center justify-center transform scale-95 transition duration-1000">
-                     <img id="donut-graphic" src="" alt="Colorful Donut" width="300" class="opacity-0 transition-all duration-700 scale-0">
-                </div>
-            </div >
-
-        </div >
-    </header>
-
-
-    <!-- 2. How to Play (The Recipe for Fun) -->
-    <section id="how-to-play" class="section-padding bg-donut-cream/50 border-t border-b border-dashed">
-        <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-custom text-[#a0522d] mb-12">📖 The Recipe for Fun</h2>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-16">Three simple steps to baking your first chromatic donut.</p>
-
-            <!-- Grid of 3 Steps (Recipe Cards) -->
-            <div class="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
-                
-                <!-- Step 1: Snap Card -->
-                <div class="recipe-card p-6 rounded-2xl text-left flex flex-col items-center hover:shadow-lg">
-                    <div class="text-4xl mb-3" role="img" aria-label="Camera Icon">📸</div>
-                    <h3 class="text-2xl font-custom text-[#a0522d]">1. Snap</h3>
-                    <p class="mt-2 text-gray-600 flex-grow">Capture anything around you—the perfect leaf, a sunset hue, or your pet's funny fur.</p>
-                    <p class="mt-4 text-sm font-bold bg-fondant p-2 rounded-lg">Focus on the Moment</p>
-                </div >
-
-                <!-- Step 2: Blend Card -->
-                <div class="recipe-card p-6 rounded-2xl text-left flex flex-col items-center hover:shadow-lg">
-                    <div class="text-4xl mb-3" role="img" aria-label="Color Palette Icon">🎨</div>
-                    <h3 class="text-2xl font-custom text-[#a0522d]">2. Blend</h3>
-                    <p class="mt-2 text-gray-600 flex-grow">Our system analyzes your photos, finding the dominant natural colors in every shot.</p>
-                    <p class="mt-4 text-sm font-bold bg-fondant p-2 rounded-lg">Discover the Palette</p>
-                </div >
-
-                <!-- Step 3: Bake Card -->
-                <div class="recipe-card p-6 rounded-2xl text-left flex flex-col items-center hover:shadow-lg">
-                    <div class="text-4xl mb-3" role="img" aria-label="Donut Icon">🍩</div>
-                    <h3 class="text-2xl font-custom text-[#a0522d]">3. Bake</h3>
-                    <p class="mt-2 text-gray-600 flex-grow">Match the discovered colors to bake colorful, whimsical donuts and complete missions!</p>
-                    <p class="mt-4 text-sm font-bold bg-fondant p-2 rounded-lg">Celebrate Your Craft</p>
-                </div >
-
-            </div >
-        </div >
-    </section>
-
-
-    <!-- 3. Gallery of Moments (The Donut Wall) -->
-    <section id="gallery" class="section-padding bg-donut-cream/70">
-        <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-custom text-[#a0522d] mb-4">🧺 Gallery of Moments</h2>
-            <p class="text-gray-600 max-w-3xl mx-auto mb-16 text-lg">See what the playful art community has been baking and capturing.</p>
-
-            <!-- Grid Container for Polaroid Images -->
-            <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-8 p-4">
-                
-                <!-- Card 1 -->
-                <figure class="polaroid bg-white rounded-lg overflow-hidden cursor-pointer" onclick="openLightbox('design/screenshots/hunt_1_snap.png', 'Snapping the perfect color from everyday life.')">
-                    <div class="w-full h-48 bg-gray-300 flex items-center justify-center text-sm text-gray-600 p-4 relative overflow-hidden group-hover:opacity-100 transition duration-300"
-                         style="background-image: url('design/screenshots/hunt_1_snap.png'); background-size: cover; background-position: center;"></div>
-                    <figcaption class="p-2 text-xs font-semibold text-left italic/90">Finding colors everywhere</figcaption>
-                </figure>
-
-                <!-- Card 2 -->
-                <figure class="polaroid bg-white rounded-lg overflow-hidden cursor-pointer" onclick="openLightbox('design/screenshots/hunt_1_collect.png', 'Color matching and mission status overview.')">
-                    <div class="w-full h-48 bg-gray-300 flex items-center justify-center text-sm text-gray-600 p-4 relative overflow-hidden group-hover:opacity-100 transition duration-300"
-                         style="background-image: url('design/screenshots/hunt_1_collect.png'); background-size: cover; background-position: center;"></div>
-                    <figcaption class="p-2 text-xs font-semibold text-left italic/90">Donut capture complete</figcaption>
-                </figure>
-
-                <!-- Card 3 -->
-                <figure class="polaroid bg-white rounded-lg overflow-hidden cursor-pointer" onclick="openLightbox('design/screenshots/sprinkles.png', 'Exploring colorful sprinkle combinations.')">
-                    <div class="w-full h-48 bg-gray-300 flex items-center justify-center text-sm text-gray-600 p-4 relative overflow-hidden group-hover:opacity-100 transition duration-300"
-                         style="background-image: url('design/screenshots/sprinkles.png'); background-size: cover; background-position: center;"></div>
-                    <figcaption class="p-2 text-xs font-semibold text-left italic/90">A day in the sprinkle shop</figcaption>
-                </figure>
-
-                <!-- Card 4 -->
-                <figure class="polaroid bg-white rounded-lg overflow-hidden cursor-pointer" onclick="openLightbox('design/screenshots/kitchen_1_list.png', 'A delightful kitchen scene full of baking inspiration.')">
-                    <div class="w-full h-48 bg-gray-300 flex items-center justify-center text-sm text-gray-600 p-4 relative overflow-hidden group-hover:opacity-100 transition duration-300"
-                         style="background-image: url('design/screenshots/kitchen_1_list.png'); background-size: cover; background-position: center;"></div>
-                    <figcaption class="p-2 text-xs font-semibold text-left italic/90">Baking inspiration from daily life</figcaption>
-                </figure>
-
-                <!-- Card 5 -->
-                <figure class="polaroid bg-white rounded-lg overflow-hidden cursor-pointer" onclick="openLightbox('design/screenshots/kitchen_1_details.png', 'Sweet details from the kitchen.')">
-                    <div class="w-full h-48 bg-gray-300 flex items-center justify-center text-sm text-gray-600 p-4 relative overflow-hidden group-hover:opacity-100 transition duration-300"
-                         style="background-image: url('design/screenshots/kitchen_1_details.png'); background-size: cover; background-position: center;"></div>
-                    <figcaption class="p-2 text-xs font-semibold text-left italic/90">Where the magic happens</figcaption>
-                </figure>
-
-            </div>
-        </div >
-    </section>
-
-
-    <!-- 4. Relaxing Features (Stress-Free Design) -->
-    <section id="features" class="section-padding bg-white border-t pt-28 pb-16">
-        <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-custom text-[#a0522d] mb-4">😌 Crafted for Cozy</h2>
-            <p class="text-gray-600 max-w-3xl mx-auto mb-16 text-lg">We built Donut Hunt to be a genuinely relaxing experience. No pressure, just pure creative enjoyment.</p>
-
-            <!-- Feature Grid -->
-            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-
-                <!-- Feature Card 1 -->
-                <div class="bg-donut-cream p-8 rounded-3xl shadow-cozy hover:scale-[1.02] transition duration-300 border-t-4 border-[#ffb3b3]">
-                    <h3 class="text-2xl font-custom text-[#a0522d] mb-3">Zero Timers, Zero Stress</h3>
-                    <p class="text-gray-600 body-font">There are no time limits or demanding goals. Play at your own speed and enjoy the cozy moments.</p>
-                </div >
-
-                <!-- Feature Card 2 -->
-                <div class="bg-donut-cream p-8 rounded-3xl shadow-cozy hover:scale-[1.02] transition duration-300 border-t-4 border-[#bbd4f5]">
-                    <h3 class="text-2xl font-custom text-[#a0522d] mb-3">Endless Photo Inspiration</h3>
-                    <p class="text-gray-600 body-font">Turn your daily walk into a photo scavenger hunt. Everything is an opportunity for color!</p>
-                </div >
-
-                <!-- Feature Card 3 -->
-                <div class="bg-donut-cream p-8 rounded-3xl shadow-cozy hover:scale-[1.02] transition duration-300 border-t-4 border-[#e6c792]">
-                    <h3 class="text-2xl font-custom text-[#a0522d] mb-3">Personalized Progress</h3>
-                    <p class="text-gray-600 body-font">Track your favorite colors and accumulated missions. Enjoy a growing collection of beautiful art.</p>
-                </div>
-
-            </div >
-        </div >
-    </section>
-
-
-    <!-- 5. Community & Downloads (REMOVED) -->
-``
-
-
-    <!-- 6. Footer -->
-    <footer id="download" class="bg-bakery-brown text-white p-10 text-center">
-        <h2 class="text-3xl font-custom mb-4">✨ Donut Hunt is Free!</h2>
-        <p class="mb-6 max-w-xl mx-auto text-sm opacity-90">Download Donut Hunt at no cost and start your colorful photo adventure today!</p>
-
-        <!-- Redundant download buttons (for accessibility) -->
-        <div class="flex justify-center space-x-6">
-             <a href="#" target="_blank" role="button" class="bg-white text-[#1a202c] py-3 px-8 rounded-full font-bold hover:scale-[1.05] transition duration-300 shadow-lg">
-                Get it Free on Google Play
+            <a href="https://play.google.com/store/apps/details?id=org.dyndns.warenix.donuthunt" target="_blank" rel="noopener noreferrer" class="btn-play text-white px-6 py-3 rounded-full font-display font-bold text-lg shadow-bounce flex items-center gap-2" aria-label="Download Donut Hunt free on Google Play">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.01 21.53L7.25 23h-2.82l2.25-11h3.86l-2.25 11z"/></svg>
+                Get it Free
             </a>
         </div>
+    </nav>
 
-        <p class="mt-12 text-sm opacity-70">❤️ Luna & Isla, built in HK</p>
-    </footer >
-
-
-    <!-- LIGHTBOX MODAL (Hidden by default) -->
-    <div id="lightbox" class="fixed inset-0 bg-black/80 z-50 backdrop-blur-sm hidden items-center justify-center transition-opacity opacity-0">
-        <div class="relative max-w-4xl mx-4 p-6 bg-white rounded-xl shadow-2xl transform scale-[0.9] transition duration-300" id="lightbox-content">
-            <!-- Close button -->
-            <button onclick="closeLightbox()" class="absolute top-4 right-4 text-gray-500 hover:text-[#a0522d] p-2">&times;</button>
+    <!-- Hero Section -->
+    <header id="home" class="relative min-h-[90vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20 lg:py-32 overflow-hidden" role="banner">
+        <div class="absolute inset-0" aria-hidden="true">
+            <!-- Big floating donuts -->
+            <div class="absolute top-1/4 left-5 w-32 h-32 animate-float" style="animation-delay: 0s;">
+                <svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#FFD6A5"/><circle cx="50" cy="50" r="20" fill="#FEF9F0"/></svg>
+            </div>
+            <div class="absolute top-1/3 right-5 w-24 h-24 animate-float" style="animation-delay: 1s;">
+                <svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#FFB5E8"/><circle cx="50" cy="50" r="20" fill="#FEF9F0"/></svg>
+            </div>
+            <div class="absolute bottom-1/4 left-10 w-20 h-20 animate-float" style="animation-delay: 2s;">
+                <svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#89CFF0"/><circle cx="50" cy="50" r="20" fill="#FEF9F0"/></svg>
+            </div>
+            <div class="absolute bottom-1/3 right-10 w-28 h-28 animate-float" style="animation-delay: 3s;">
+                <svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#A0E7E5"/><circle cx="50" cy="50" r="20" fill="#FEF9F0"/></svg>
+            </div>
+        </div>
+        
+        <div class="relative z-10 max-w-6xl mx-auto text-center">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 bg-white/90 backdrop-blur px-5 py-2 rounded-full shadow-soft mb-8 animate-pop" style="animation-delay: 0.2s;">
+                <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-coral opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-coral"></span></span>
+                <span class="font-display font-bold text-chocolate text-sm">FREE • No Ads • Offline • Ages 3+</span>
+            </div>
             
-             <!-- Image displayed here -->
-            <img id="lightbox-image" src="" alt="Gallery Screenshot" class="w-full max-h-[80vh] object-contain rounded-lg mb-4">
+            <!-- Main headline -->
+            <h1 class="font-display text-5xl sm:text-7xl lg:text-8xl font-extrabold leading-[1.1] mb-6 animate-pop" style="animation-delay: 0.4s;">
+                <span class="text-chocolate">Snap Colors,</span><br>
+                <span class="bg-gradient-to-r from-coral via-pink to-sky bg-clip-text text-transparent">Bake Donuts!</span>
+            </h1>
+            
+            <!-- Subtitle -->
+            <p class="text-lg sm:text-xl lg:text-2xl text-chocolate/70 max-w-2xl mx-auto mb-10 animate-pop font-medium" style="animation-delay: 0.6s;">
+                Point your camera at anything colorful — a red apple, blue sky, yellow taxi — and watch it turn into a yummy donut! 🍩
+            </p>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-pop" style="animation-delay: 0.8s;">
+                <a href="https://play.google.com/store/apps/details?id=org.dyndns.warenix.donuthunt" target="_blank" rel="noopener noreferrer" class="btn-play text-white px-10 py-4 rounded-full font-display font-bold text-xl shadow-bounce w-full sm:w-auto group" aria-label="Download Donut Hunt free on Google Play">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="mr-2 group-hover:animate-bounce" aria-hidden="true"><path d="M9.01 21.53L7.25 23h-2.82l2.25-11h3.86l-2.25 11z"/></svg>
+                    Play Free on Google Play
+                </a>
+                <a href="#how-to-play" class="btn-secondary text-chocolate px-10 py-4 rounded-full font-display font-bold text-xl w-full sm:w-auto" aria-label="Learn how to play Donut Hunt">
+                    How to Play
+                </a>
+            </div>
+            
+            <!-- Hero illustration -->
+            <div class="relative animate-float" style="animation-duration: 4s;">
+                <div class="relative inline-block">
+                    <!-- Camera viewfinder mockup -->
+                    <div class="relative w-full max-w-md mx-auto" role="img" aria-label="Camera viewfinder showing color detection turning into donuts">
+                        <div class="aspect-[4/3] bg-gradient-to-br from-sky/30 via-mint/30 to-pink/30 rounded-3xl border-4 border-chocolate/20 relative overflow-hidden shadow-bounce">
+                            <!-- Viewfinder frame -->
+                            <div class="absolute inset-4 border-2 border-chocolate/30 rounded-2xl pointer-events-none">
+                                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-chocolate text-white px-3 py-1 rounded-full text-xs font-bold">🎯 TAP TO SNAP</div>
+                            </div>
+                            <!-- Crosshair -->
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="w-16 h-16 border-4 border-white/80 rounded-full shadow-lg flex items-center justify-center">
+                                    <div class="w-8 h-8 bg-gradient-to-br from-coral to-pink rounded-full animate-pulse-slow"></div>
+                                </div>
+                            </div>
+                            <!-- Detected colors floating -->
+                            <div class="absolute top-4 right-4 flex flex-col gap-2" aria-hidden="true">
+                                <div class="color-swatch bg-gradient-to-br from-red-400 to-red-600 animate-pop" style="animation-delay: 0.5s;"></div>
+                                <div class="color-swatch bg-gradient-to-br from-yellow-300 to-yellow-500 animate-pop" style="animation-delay: 0.7s;"></div>
+                                <div class="color-swatch bg-gradient-to-br from-blue-400 to-blue-600 animate-pop" style="animation-delay: 0.9s;"></div>
+                            </div>
+                            <!-- Donut results popping out -->
+                            <div class="absolute bottom-4 left-4 flex gap-1.5" aria-hidden="true">
+                                <div class="w-12 h-12 bg-gradient-to-br from-[#FFD6A5] to-[#C1703A] rounded-full flex items-center justify-center text-2xl animate-pop shadow-lg" style="animation-delay: 1.1s;">🍩</div>
+                                <div class="w-12 h-12 bg-gradient-to-br from-[#FFB5E8] to-[#FF6B9D] rounded-full flex items-center justify-center text-2xl animate-pop shadow-lg" style="animation-delay: 1.3s;">🍩</div>
+                                <div class="w-12 h-12 bg-gradient-to-br from-[#89CFF0] to-[#3A8FD0] rounded-full flex items-center justify-center text-2xl animate-pop shadow-lg" style="animation-delay: 1.5s;">🍩</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-slow" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6B4423" stroke-width="2.5" class="text-chocolate/60"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        </div>
+    </header>
 
-            <!-- Caption/Details -->
-            <div class="text-center bg-donut-cream p-4 rounded-lg border-t-2 border-[#a0522d]">
-                <h3 id="lightbox-caption" class="text-xl font-custom text-[#a0522d] mb-1">Screenshot Title</h3>
-                <p id="lightbox-details" class="text-gray-600 italic"></p>
+    <!-- How to Play -->
+    <section id="how-to-play" class="py-20 sm:py-28 lg:py-36 px-4 sm:px-6 lg:px-8" aria-labelledby="howto-title">
+        <div class="max-w-6xl mx-auto">
+            <header class="text-center mb-16">
+                <span class="inline-block bg-gradient-to-r from-peach to-pink px-5 py-2 rounded-full text-chocolate font-display font-bold text-sm mb-4 animate-pop">📖 The Recipe for Fun</span>
+                <h2 id="howto-title" class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-chocolate mb-4">Three Steps to<br>Donut Magic!</h2>
+                <p class="text-lg sm:text-xl text-chocolate/70 max-w-2xl mx-auto">Super simple. Zero stress. Pure color joy.</p>
+            </header>
+            
+            <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Step 1 -->
+                <article class="mission-card p-8 relative group" style="--r: -2deg;">
+                    <div class="absolute -top-6 -right-6 w-20 h-20 opacity-20 animate-float" aria-hidden="true">📸</div>
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-coral to-peach rounded-2xl mb-6 shadow-lg">
+                            <span class="text-4xl animate-wiggle">📸</span>
+                        </div>
+                        <h3 class="font-display text-2xl sm:text-3xl font-extrabold text-chocolate mb-3">1. Snap!</h3>
+                        <p class="text-chocolate/70 text-lg mb-6 leading-relaxed">Point your camera at anything colorful — flowers, toys, sunset, your blue socks — and tap the giant donut button!</p>
+                        <div class="inline-flex items-center gap-2 bg-peach/50 px-4 py-2 rounded-full">
+                            <span class="w-2 h-2 bg-coral rounded-full animate-pulse"></span>
+                            <span class="text-sm font-bold text-chocolate">Volume buttons work too!</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <!-- Step 2 -->
+                <article class="mission-card p-8 relative group" style="--r: 2deg;">
+                    <div class="absolute -top-6 -left-6 w-20 h-20 opacity-20 animate-float" style="animation-delay: 1s;" aria-hidden="true">🎨</div>
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-sky to-mint rounded-2xl mb-6 shadow-lg">
+                            <span class="text-4xl animate-wiggle" style="animation-delay: 0.5s;">🎨</span>
+                        </div>
+                        <h3 class="font-display text-2xl sm:text-3xl font-extrabold text-chocolate mb-3">2. Discover!</h3>
+                        <p class="text-chocolate/70 text-lg mb-6 leading-relaxed">Our color magic finds every hue hiding in your photo. Red, blue, yellow, and 22 more — each becomes a unique donut!</p>
+                        <div class="flex gap-2" aria-label="Example color donuts">
+                            <div class="color-swatch bg-gradient-to-br from-red-400 to-red-600" title="Red"></div>
+                            <div class="color-swatch bg-gradient-to-br from-yellow-300 to-yellow-500" title="Yellow"></div>
+                            <div class="color-swatch bg-gradient-to-br from-blue-400 to-blue-600" title="Blue"></div>
+                            <div class="color-swatch bg-gradient-to-br from-green-400 to-green-600" title="Green"></div>
+                            <div class="color-swatch bg-gradient-to-br from-purple-400 to-purple-600" title="Purple"></div>
+                        </div>
+                    </div>
+                </article>
+                
+                <!-- Step 3 -->
+                <article class="mission-card p-8 relative group" style="--r: -1deg;">
+                    <div class="absolute -top-6 -right-6 w-20 h-20 opacity-20 animate-float" style="animation-delay: 2s;" aria-hidden="true">🍩</div>
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink to-lavender rounded-2xl mb-6 shadow-lg">
+                            <span class="text-4xl animate-wiggle" style="animation-delay: 1s;">🍩</span>
+                        </div>
+                        <h3 class="font-display text-2xl sm:text-3xl font-extrabold text-chocolate mb-3">3. Collect!</h3>
+                        <p class="text-chocolate/70 text-lg mb-6 leading-relaxed">Match colors to complete 18 fun missions like <strong>Rainbow Road</strong>, <strong>Ocean Blue</strong> & <strong>Candy Shop</strong>. Fill your Color Dex!</p>
+                        <div class="inline-flex items-center gap-2 bg-pink/30 px-4 py-2 rounded-full">
+                            <span class="text-lg">🏆</span>
+                            <span class="text-sm font-bold text-chocolate">Become a Rainbow Champion!</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-20 sm:py-28 lg:py-36 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-peach/20 via-transparent to-mint/20" aria-labelledby="features-title">
+        <div class="max-w-6xl mx-auto">
+            <header class="text-center mb-16">
+                <h2 id="features-title" class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-chocolate mb-4">Made for Cozy Play</h2>
+                <p class="text-lg sm:text-xl text-chocolate/70 max-w-2xl mx-auto">No timers. No pressure. Just you, your camera, and a world of color.</p>
+            </header>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <article class="donut-card p-7 text-center group">
+                    <div class="text-5xl mb-4 animate-float">⏰</div>
+                    <h3 class="font-display text-xl font-bold text-chocolate mb-2">Zero Timers</h3>
+                    <p class="text-chocolate/70 text-sm">Play at your own pace. No countdowns, no rush.</p>
+                </article>
+                <article class="donut-card p-7 text-center group">
+                    <div class="text-5xl mb-4 animate-float" style="animation-delay: 0.5s;">📶</div>
+                    <h3 class="font-display text-xl font-bold text-chocolate mb-2">Works Offline</h3>
+                    <p class="text-chocolate/70 text-sm">No Wi-Fi? No problem. Hunt colors anywhere!</p>
+                </article>
+                <article class="donut-card p-7 text-center group">
+                    <div class="text-5xl mb-4 animate-float" style="animation-delay: 1s;">🛡️</div>
+                    <h3 class="font-display text-xl font-bold text-chocolate mb-2">Privacy First</h3>
+                    <p class="text-chocolate/70 text-sm">Photos stay on your device. Never uploaded. Ever.</p>
+                </article>
+                <article class="donut-card p-7 text-center group">
+                    <div class="text-5xl mb-4 animate-float" style="animation-delay: 1.5s;">👶</div>
+                    <h3 class="font-display text-xl font-bold text-chocolate mb-2">Kid Safe</h3>
+                    <p class="text-chocolate/70 text-sm">Rated 3+. No ads, no purchases, no tracking.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Missions -->
+    <section id="missions" class="py-20 sm:py-28 lg:py-36 px-4 sm:px-6 lg:px-8" aria-labelledby="missions-title">
+        <div class="max-w-6xl mx-auto">
+            <header class="text-center mb-16">
+                <h2 id="missions-title" class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-chocolate mb-4">18 Yummy Missions</h2>
+                <p class="text-lg sm:text-xl text-chocolate/70 max-w-2xl mx-auto">Each mission needs specific colors. Can you complete them all?</p>
+            </header>
+            
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" role="list">
+                <article class="mission-card p-6 relative group" role="listitem">
+                    <div class="absolute -top-4 -right-4 w-16 h-16 opacity-30 animate-float" aria-hidden="true">🌅</div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-yellow-300 to-orange-400 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">🌅</div>
+                        <div>
+                            <h3 class="font-display text-lg font-extrabold text-chocolate">Sunrise Drive</h3>
+                            <p class="text-chocolate/70 text-sm mt-1">Find warm morning colors</p>
+                            <div class="flex gap-1.5 mt-3" aria-label="Colors needed">
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #FFD700, #FFA500);" title="Gold"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #FF8C00, #FF4500);" title="Orange"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #FF6347, #DC143C);" title="Red"></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="mission-card p-6 relative group" role="listitem">
+                    <div class="absolute -top-4 -right-4 w-16 h-16 opacity-30 animate-float" style="animation-delay: 0.5s;" aria-hidden="true">🌊</div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-sky to-blue-400 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">🌊</div>
+                        <div>
+                            <h3 class="font-display text-lg font-extrabold text-chocolate">Ocean Blue</h3>
+                            <p class="text-chocolate/70 text-sm mt-1">Dive into cool blues</p>
+                            <div class="flex gap-1.5 mt-3" aria-label="Colors needed">
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #87CEEB, #4682B4);" title="Sky Blue"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #4169E1, #00008B);" title="Deep Blue"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #20B2AA, #008B8B);" title="Teal"></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="mission-card p-6 relative group" role="listitem">
+                    <div class="absolute -top-4 -right-4 w-16 h-16 opacity-30 animate-float" style="animation-delay: 1s;" aria-hidden="true">🌈</div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-gradient-to-r from-red-400 via-yellow-300 via-green-400 via-blue-400 to-purple-400 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">🌈</div>
+                        <div>
+                            <h3 class="font-display text-lg font-extrabold text-chocolate">Rainbow Road</h3>
+                            <p class="text-chocolate/70 text-sm mt-1">Catch every color!</p>
+                            <div class="flex gap-1.5 mt-3" aria-label="Colors needed">
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #FF4444, #CC0000);" title="Red"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #FFA500, #FF8C00);" title="Orange"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #FFD700, #DAA520);" title="Yellow"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #32CD32, #228B22);" title="Green"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #4169E1, #0000CD);" title="Blue"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #8A2BE2, #4B0082);" title="Purple"></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="mission-card p-6 relative group" role="listitem">
+                    <div class="absolute -top-4 -right-4 w-16 h-16 opacity-30 animate-float" style="animation-delay: 1.5s;" aria-hidden="true">🌿</div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-green-300 to-emerald-500 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">🌿</div>
+                        <div>
+                            <h3 class="font-display text-lg font-extrabold text-chocolate">Jungle Quest</h3>
+                            <p class="text-chocolate/70 text-sm mt-1">Wild greens & earth tones</p>
+                            <div class="flex gap-1.5 mt-3" aria-label="Colors needed">
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #7CFC00, #32CD32);" title="Lime"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #228B22, #006400);" title="Forest"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #8FBC8F, #556B2F);" title="Olive"></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="mission-card p-6 relative group" role="listitem">
+                    <div class="absolute -top-4 -right-4 w-16 h-16 opacity-30 animate-float" style="animation-delay: 2s;" aria-hidden="true">🍭</div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-pink-300 to-purple-300 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">🍭</div>
+                        <div>
+                            <h3 class="font-display text-lg font-extrabold text-chocolate">Candy Shop</h3>
+                            <p class="text-chocolate/70 text-sm mt-1">Sweet pastel palette</p>
+                            <div class="flex gap-1.5 mt-3" aria-label="Colors needed">
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #FFB6C1, #FF69B4);" title="Pink"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #DDA0DD, #BA55D3);" title="Lavender"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #FFF0F5, #FFB6C1);" title="Rose"></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="mission-card p-6 relative group" role="listitem">
+                    <div class="absolute -top-4 -right-4 w-16 h-16 opacity-30 animate-float" style="animation-delay: 2.5s;" aria-hidden="true">⭐</div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-yellow-200 to-amber-400 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">⭐</div>
+                        <div>
+                            <h3 class="font-display text-lg font-extrabold text-chocolate">Golden Hour</h3>
+                            <p class="text-chocolate/70 text-sm mt-1">Warm glow magic</p>
+                            <div class="flex gap-1.5 mt-3" aria-label="Colors needed">
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #FFDF00, #FFD700);" title="Gold"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #FFA500, #FF8C00);" title="Amber"></div>
+                                <div class="color-swatch w-8 h-8" style="background: linear-gradient(135deg, #FF6347, #FF4500);" title="Coral"></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            
+            <p class="text-center text-chocolate/60 text-sm mt-10">...and 12 more missions waiting for you! 🗝️</p>
+        </div>
+    </section>
+
+    <!-- Color Dex -->
+    <section id="color-dex" class="py-20 sm:py-28 lg:py-36 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-lavender/20 via-transparent to-peach/20" aria-labelledby="colordex-title">
+        <div class="max-w-6xl mx-auto">
+            <header class="text-center mb-16">
+                <h2 id="colordex-title" class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-chocolate mb-4">Your Color Dex 📚</h2>
+                <p class="text-lg sm:text-xl text-chocolate/70 max-w-2xl mx-auto">Collect all 25 color donuts! Each has its own personality.</p>
+            </header>
+            
+            <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 lg:gap-4 justify-center" role="list" aria-label="Color Dex collection">
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Red donut - collected" title="Red 🍓">
+                    <div class="absolute inset-0 bg-gradient-to-br from-red-400 to-red-600 rounded-[16px] opacity-90"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl animate-pop" style="animation-delay: 0.1s;">🍩</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-white/90 whitespace-nowrap">Red</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Orange donut - collected" title="Orange 🍊">
+                    <div class="absolute inset-0 bg-gradient-to-br from-orange-400 to-orange-600 rounded-[16px] opacity-90"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl animate-pop" style="animation-delay: 0.2s;">🍩</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-white/90 whitespace-nowrap">Orange</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Yellow donut - collected" title="Yellow 🍋">
+                    <div class="absolute inset-0 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-[16px] opacity-90"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl animate-pop" style="animation-delay: 0.3s;">🍩</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-chocolate/80 whitespace-nowrap">Yellow</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Green donut - collected" title="Green 🍏">
+                    <div class="absolute inset-0 bg-gradient-to-br from-green-400 to-green-600 rounded-[16px] opacity-90"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl animate-pop" style="animation-delay: 0.4s;">🍩</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-white/90 whitespace-nowrap">Green</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Blue donut - collected" title="Blue 🫐">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600 rounded-[16px] opacity-90"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl animate-pop" style="animation-delay: 0.5s;">🍩</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-white/90 whitespace-nowrap">Blue</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Purple donut - collected" title="Purple 🍇">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-400 to-purple-600 rounded-[16px] opacity-90"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl animate-pop" style="animation-delay: 0.6s;">🍩</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-white/90 whitespace-nowrap">Purple</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Pink donut - collected" title="Pink 🌸">
+                    <div class="absolute inset-0 bg-gradient-to-br from-pink-400 to-pink-600 rounded-[16px] opacity-90"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl animate-pop" style="animation-delay: 0.7s;">🍩</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-white/90 whitespace-nowrap">Pink</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Teal donut - collected" title="Teal 🦚">
+                    <div class="absolute inset-0 bg-gradient-to-br from-teal-400 to-teal-600 rounded-[16px] opacity-90"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl animate-pop" style="animation-delay: 0.8s;">🍩</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-white/90 whitespace-nowrap">Teal</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Brown donut - collected" title="Brown 🍫">
+                    <div class="absolute inset-0 bg-gradient-to-br from-amber-700 to-amber-900 rounded-[16px] opacity-90"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl animate-pop" style="animation-delay: 0.9s;">🍩</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-white/90 whitespace-nowrap">Brown</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="White donut - collected" title="White ☁️">
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300 rounded-[16px] opacity-90 border border-chocolate/20"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl animate-pop" style="animation-delay: 1s;">🍩</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-chocolate/80 whitespace-nowrap">White</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Black donut - collected" title="Black 🖤">
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-black rounded-[16px] opacity-90"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl animate-pop" style="animation-delay: 1.1s;">🍩</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-white/90 whitespace-nowrap">Black</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Coral donut - locked" title="Coral 🪸" disabled style="opacity: 0.5;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400 rounded-[16px]"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl">🔒</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-gray-500 whitespace-nowrap">???</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Magenta donut - locked" title="Magenta 💖" disabled style="opacity: 0.5;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400 rounded-[16px]"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl">🔒</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-gray-500 whitespace-nowrap">???</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Lime donut - locked" title="Lime 🌿" disabled style="opacity: 0.5;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400 rounded-[16px]"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl">🔒</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-gray-500 whitespace-nowrap">???</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Indigo donut - locked" title="Indigo 🔮" disabled style="opacity: 0.5;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400 rounded-[16px]"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl">🔒</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-gray-500 whitespace-nowrap">???</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Maroon donut - locked" title="Maroon 🍷" disabled style="opacity: 0.5;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400 rounded-[16px]"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl">🔒</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-gray-500 whitespace-nowrap">???</div>
+                </button>
+                <button class="donut-card aspect-square relative group p-2" role="listitem" aria-label="Gold donut - locked" title="Gold ✨" disabled style="opacity: 0.5;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400 rounded-[16px]"></div>
+                    <div class="relative z-10 flex items-center justify-center h-full">
+                        <span class="text-3xl">🔒</span>
+                    </div>
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-bold text-gray-500 whitespace-nowrap">???</div>
+                </button>
+            </div>
+            
+            <p class="text-center text-chocolate/60 text-sm mt-8">12 secret colors waiting to be discovered... ✨</p>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="py-20 sm:py-28 lg:py-36 px-4 sm:px-6 lg:px-8" aria-labelledby="gallery-title">
+        <div class="max-w-6xl mx-auto">
+            <header class="text-center mb-16">
+                <h2 id="gallery-title" class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-chocolate mb-4">See It in Action</h2>
+                <p class="text-lg sm:text-xl text-chocolate/70 max-w-2xl mx-auto">Real gameplay screenshots from the Google Play store</p>
+            </header>
+            
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8" role="list">
+                <figure class="polaroid group" role="listitem" tabindex="0" onclick="openLightbox('https://play-lh.googleusercontent.com/kVa4DdnEWlPcn9KaLlrp0PGXoULLQOmTdUoOT2pX1dKXDAENF6qb6W6DkLt3t4TDmbvDErTFsP-I22kCc3fifA=w1024-h576', 'Camera Viewfinder', 'Snap colors with the giant donut shutter button!')">
+                    <img src="https://play-lh.googleusercontent.com/kVa4DdnEWlPcn9KaLlrp0PGXoULLQOmTdUoOT2pX1dKXDAENF6qb6W6DkLt3t4TDmbvDErTFsP-I22kCc3fifA=w526-h296" alt="Camera viewfinder showing color detection" loading="lazy" width="526" height="296">
+                    <figcaption class="mt-3 text-center font-display text-chocolate font-bold text-sm">📸 Camera Viewfinder</figcaption>
+                </figure>
+                
+                <figure class="polaroid group" role="listitem" tabindex="0" onclick="openLightbox('https://play-lh.googleusercontent.com/9WRgUpMZWr72t1gLU40GxPcODBZaXaHiAXVo47RfBkX5jjxDUz9OBX2vmsBB_c9GVyLDpTAcTRWzsUrjjzdgoS4=w1024-h576', 'Color Matching', 'Match detected colors to complete missions!')">
+                    <img src="https://play-lh.googleusercontent.com/9WRgUpMZWr72t1gLU40GxPcODBZaXaHiAXVo47RfBkX5jjxDUz9OBX2vmsBB_c9GVyLDpTAcTRWzsUrjjzdgoS4=w526-h296" alt="Color matching and mission progress screen" loading="lazy" width="526" height="296">
+                    <figcaption class="mt-3 text-center font-display text-chocolate font-bold text-sm">🎨 Color Matching</figcaption>
+                </figure>
+                
+                <figure class="polaroid group" role="listitem" tabindex="0" onclick="openLightbox('https://play-lh.googleusercontent.com/tJMWmMIKG0mEq1KQX3jCOowf1GduZ-jS-RHrjt69KJD8u0HoII2Uy3II2oIp8KrCExeECdnFQ_KVxVTLiEgY8g=w1024-h576', 'Sprinkle Shop', 'Mix & match sprinkles for your donuts!')">
+                    <img src="https://play-lh.googleusercontent.com/tJMWmMIKG0mEq1KQX3jCOowf1GduZ-jS-RHrjt69KJD8u0HoII2Uy3II2oIp8KrCExeECdnFQ_KVxVTLiEgY8g=w526-h296" alt="Sprinkle customization screen" loading="lazy" width="526" height="296">
+                    <figcaption class="mt-3 text-center font-display text-chocolate font-bold text-sm">✨ Sprinkle Shop</figcaption>
+                </figure>
+                
+                <figure class="polaroid group" role="listitem" tabindex="0" onclick="openLightbox('https://play-lh.googleusercontent.com/qzQreeM4W5ewFNXJaOUOn74Q8s3XxxTEr2PQQCFvg-P6IDr1VuruAA6DpqXDwqrcakv-_B8QOCjdAGIi7AVDfA=w1024-h576', 'Kitchen Missions', 'Pick your next color adventure!')">
+                    <img src="https://play-lh.googleusercontent.com/qzQreeM4W5ewFNXJaOUOn74Q8s3XxxTEr2PQQCFvg-P6IDr1VuruAA6DpqXDwqrcakv-_B8QOCjdAGIi7AVDfA=w526-h296" alt="Mission selection kitchen screen" loading="lazy" width="526" height="296">
+                    <figcaption class="mt-3 text-center font-display text-chocolate font-bold text-sm">🍳 Mission Kitchen</figcaption>
+                </figure>
+                
+                <figure class="polaroid group" role="listitem" tabindex="0" onclick="openLightbox('https://play-lh.googleusercontent.com/9wqjNrPVuHTQffmPrNzBZWcqSIPwxicf13AMJT1pdYF3g_oIJOsW4r4ZS3nBqBaoT4i3Ojhdr8ZSxk_QeC_NGA=w1024-h576', 'Mission Details', 'See what colors each mission needs')">
+                    <img src="https://play-lh.googleusercontent.com/9wqjNrPVuHTQffmPrNzBZWcqSIPwxicf13AMJT1pdYF3g_oIJOsW4r4ZS3nBqBaoT4i3Ojhdr8ZSxk_QeC_NGA=w526-h296" alt="Mission detail screen showing required colors" loading="lazy" width="526" height="296">
+                    <figcaption class="mt-3 text-center font-display text-chocolate font-bold text-sm">📋 Mission Details</figcaption>
+                </figure>
+                
+                <figure class="polaroid group" role="listitem" tabindex="0" onclick="openLightbox('https://play-lh.googleusercontent.com/DA6ZLW9CH4Z5THQKAvbE2AzZa8mnqZkT_5fFTcs4HMgUpqiEoQkdqWFiidk1dCgTGJ03J7baBgXXvIgIg-LKDQ=w1024-h576', 'Color Dex Collection', 'Your growing collection of color donuts!')">
+                    <img src="https://play-lh.googleusercontent.com/DA6ZLW9CH4Z5THQKAvbE2AzZa8mnqZkT_5fFTcs4HMgUpqiEoQkdqWFiidk1dCgTGJ03J7baBgXXvIgIg-LKDQ=w526-h296" alt="Color Dex showing collected donuts" loading="lazy" width="526" height="296">
+                    <figcaption class="mt-3 text-center font-display text-chocolate font-bold text-sm">📚 Color Dex</figcaption>
+                </figure>
+                
+                <figure class="polaroid group" role="listitem" tabindex="0" onclick="openLightbox('https://play-lh.googleusercontent.com/PWnPPXnPKXlyMzkooWdhGWaqjo8eoynZJYAIbWIK4IrzHIe7RfNDt3vvVWruAfrozX8rGmkU4aZdzB6U-mO2=w1024-h576', 'Settings & Progress', 'Track your Rainbow Champion journey!')">
+                    <img src="https://play-lh.googleusercontent.com/PWnPPXnPKXlyMzkooWdhGWaqjo8eoynZJYAIbWIK4IrzHIe7RfNDt3vvVWruAfrozX8rGmkU4aZdzB6U-mO2=w526-h296" alt="Settings and progress tracking screen" loading="lazy" width="526" height="296">
+                    <figcaption class="mt-3 text-center font-display text-chocolate font-bold text-sm">⚙️ Progress Tracker</figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption" tabindex="-1">
+        <div id="lightbox-content" class="relative max-w-4xl w-full max-h-[90vh] bg-white rounded-3xl shadow-bounce overflow-hidden">
+            <button onclick="closeLightbox()" class="absolute top-4 right-4 z-10 w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-2xl text-chocolate shadow-lg hover:bg-white transition-colors focus-visible:outline focus-visible:outline-3 focus-visible:outline-peach" aria-label="Close lightbox">×</button>
+            <img id="lightbox-image" src="" alt="" class="w-full h-auto max-h-[70vh] object-contain">
+            <div class="p-6 bg-gradient-to-r from-peach/30 to-pink/30 border-t-2 border-chocolate/20">
+                <h3 id="lightbox-caption" class="font-display text-xl font-extrabold text-chocolate mb-1 text-center"></h3>
+                <p id="lightbox-details" class="text-chocolate/70 text-center text-sm"></p>
             </div>
         </div>
     </div>
 
+    <!-- Footer / Download -->
+    <footer id="download" class="relative bg-gradient-to-br from-chocolate via-caramel to-amber-800 py-20 px-4 sm:px-6 lg:px-8 text-white" role="contentinfo">
+        <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+            <div class="absolute top-10 left-10 w-32 h-32 animate-float opacity-20"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#FFD6A5"/><circle cx="50" cy="50" r="20" fill="#6B4423"/></svg></div>
+            <div class="absolute top-20 right-15 w-24 h-24 animate-float opacity-20" style="animation-delay: 1s;"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#FFB5E8"/><circle cx="50" cy="50" r="20" fill="#6B4423"/></svg></div>
+            <div class="absolute bottom-20 left-15 w-20 h-20 animate-float opacity-20" style="animation-delay: 2s;"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#89CFF0"/><circle cx="50" cy="50" r="20" fill="#6B4423"/></svg></div>
+            <div class="absolute bottom-10 right-20 w-28 h-28 animate-float opacity-20" style="animation-delay: 3s;"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#A0E7E5"/><circle cx="50" cy="50" r="20" fill="#6B4423"/></svg></div>
+        </div>
+        
+        <div class="relative max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-6 py-3 rounded-full mb-6 font-display font-bold text-lg">
+                <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-300 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-300"></span></span>
+                COMPLETELY FREE • NO ADS • NO PURCHASES
+            </div>
+            
+            <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4">Ready to Hunt Colors?</h2>
+            <p class="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto mb-10">Join thousands of kids discovering the rainbow in their world. Download now and start your collection!</p>
+            
+            <a href="https://play.google.com/store/apps/details?id=org.dyndns.warenix.donuthunt" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-3 bg-white text-chocolate px-10 py-5 rounded-full font-display font-bold text-xl shadow-bounce hover:shadow-[0_0_0_4px_rgba(255,255,255,0.3)] transition-all duration-200 group" aria-label="Download Donut Hunt free on Google Play">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" class="group-hover:animate-bounce" aria-hidden="true"><path d="M9.01 21.53L7.25 23h-2.82l2.25-11h3.86l-2.25 11z"/></svg>
+                <span>Get it Free on Google Play</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            
+            <div class="mt-16 pt-10 border-t border-white/20">
+                <p class="text-white/60 text-sm mb-2">🍩 Built with love by Luna & Isla in Hong Kong</p>
+                <p class="text-white/50 text-xs">Privacy Policy • <a href="mailto:warenix@gmail.com" class="underline hover:text-white">warenix@gmail.com</a></p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // ==============================================
-        // PHOTO INTERACTIVITY LOGIC (Hero Section)
-        // ==============================================
-
-        const polaroidDisplay = document.getElementById('polaroid-display');
-        const donutGraphic = document.getElementById('donut-graphic');
-
-        let photoCaptured = false;
-
-        function showPhoto() {
-            if (photoCaptured) return; // Prevent repeat clicks if already transformed
-
-             // Simulate taking a photo by changing the visual state/placeholder
-            polaroidDisplay.querySelector('[data-img-title]').innerHTML = `✅ Photo Captured!`;
-            polaroidDisplay.querySelector('[data-img-title]').style.backgroundColor = '#d1fae5'; // Light green for success
-
-            // Change the title to reflect capture status
-            polaroidDisplay.querySelector('div:first-child').textContent = "Photo Saved!";
-
-            photoCaptured = true;
-        }
-
-
-        function bakeDonut(imageSrc) {
-            donutGraphic.src = imageSrc;
-            // Animate the donut into place
-            setTimeout(() => {
-                donutGraphic.classList.remove('opacity-0', 'scale-0');
-                donutGraphic.classList.add('opacity-100', 'scale-100');
-            }, 50); // Small delay for perceived animation start
-        }
-
-        // Example: Attach donut baking logic to a button if we had one, 
-        // but here we simulate it when the photo is "captured" or on load.
-        window.onload = function() {
-             // Initialize Donut Graphic (Example placeholder until actual asset is available)
-            donutGraphic.src = 'https://via.placeholder.com/300x200/ffb3b3?text=Your+Donut+Art'; 
-        };
-
-
-        // ==============================================
-        // LIGHTBOX MODAL LOGIC (Gallery Section)
-        // ==============================================
-
+        // Lightbox functionality
         const lightbox = document.getElementById('lightbox');
         const lightboxImage = document.getElementById('lightbox-image');
         const lightboxCaption = document.getElementById('lightbox-caption');
         const lightboxDetails = document.getElementById('lightbox-details');
+        let lastFocused = null;
 
-
-        function openLightbox(imageUrl, caption) {
-            // Set image and text
+        function openLightbox(imageUrl, caption, details) {
+            lastFocused = document.activeElement;
             lightboxImage.src = imageUrl;
             lightboxCaption.textContent = caption;
-            lightboxDetails.textContent = 'A beautifully crafted moment from the community.';
-
-            // Show modal with animation
+            lightboxDetails.textContent = details;
             lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+            // Trap focus
             setTimeout(() => {
-                lightbox.classList.add('opacity-100', 'visible');
-                document.body.style.overflow = 'hidden'; // Prevent background scrolling
-            }, 10);
+                lightbox.querySelector('button').focus();
+            }, 50);
+            document.body.style.overflow = 'hidden';
         }
 
         function closeLightbox() {
-             // Hide modal with animation
-            lightbox.classList.remove('opacity-100', 'visible');
-            setTimeout(() => {
-                lightbox.classList.add('hidden');
-                document.body.style.overflow = ''; // Restore scrolling
-            }, 300);
+            lightbox.classList.add('hidden');
+            lightbox.classList.remove('flex');
+            document.body.style.overflow = '';
+            if (lastFocused) lastFocused.focus();
         }
 
-         // Close lightbox when clicking outside the content area
+        // Close on backdrop click
         lightbox.addEventListener('click', (e) => {
-             if (e.target === lightbox) {
-                 closeLightbox();
-             }
+            if (e.target === lightbox) closeLightbox();
         });
 
-
-        // ==============================================
-        // FORM HANDLING LOGIC (Community Section)
-        // ==============================================
-
-        document.getElementById('newsletter-form').addEventListener('submit', function(event) {
-            event.preventDefault(); 
-            const emailInput = this.querySelector('input[type="email"]');
-            const email = emailInput.value;
-
-            alert(`Thanks for subscribing, ${email}! Keep checking your inbox for new donut challenges.`);
-            
-            // Clear the form after "successful" submission
-            this.reset(); 
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
+                closeLightbox();
+            }
         });
 
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    target.focus({ preventScroll: true });
+                }
+            });
+        });
 
+        // Intersection Observer for scroll animations
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            document.querySelectorAll('.animate-float, .animate-pop, .donut-card, .mission-card, .polaroid').forEach(el => {
+                el.style.animationPlayState = 'paused';
+                observer.observe(el);
+            });
+        }
+
+        // Add keyboard support to gallery items
+        document.querySelectorAll('.polaroid').forEach((item, index) => {
+            item.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    item.click();
+                }
+            });
+            item.setAttribute('tabindex', '0');
+            item.setAttribute('role', 'button');
+            item.setAttribute('aria-label', `View screenshot ${index + 1}`);
+        });
+
+        // Color Dex buttons keyboard support
+        document.querySelectorAll('#color-dex button[role="listitem"]').forEach(btn => {
+            btn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (!btn.disabled) btn.click();
+                }
+            });
+        });
+
+        // Add subtle parallax to hero illustration
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const heroIllustration = document.querySelector('header .animate-float > div');
+            if (heroIllustration) {
+                window.addEventListener('mousemove', (e) => {
+                    const rect = heroIllustration.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const deltaX = (e.clientX - centerX) / 30;
+                    const deltaY = (e.clientY - centerY) / 30;
+                    heroIllustration.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+                });
+            }
+        }
+
+        // Prevent zoom on double tap for iOS
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) e.preventDefault();
+            lastTouchEnd = now;
+        }, { passive: false });
     </script>
 </body>
 </html>
